@@ -1,0 +1,13 @@
+.App {
+  height: 1200px;
+  background-color: #EEEEEE;
+}
+
+main.container {
+  max-width: 960px;
+  margin: 20px auto;
+}
+
+.posts {
+  padding: 0 10%;
+}
