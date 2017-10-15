@@ -11,3 +11,13 @@ main.container {
 .posts {
   padding: 0 10%;
 }
+
+.active::after {
+  content: "";
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: -23px;
+  height: 3px;
+  border-bottom: 3px solid white;
+}

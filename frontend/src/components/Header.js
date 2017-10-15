@@ -4,6 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
+import { Link } from 'react-router-dom';
 import Button from 'material-ui/Button';
 import CategoryList from './CategoryList';
 
@@ -19,12 +20,13 @@ const styles = theme => ({
     alignItems: 'center',
   },
   container: {
-      maxWidth: '960px',
-      margin: '0 auto',
-      width: '100%',
+    maxWidth: '960px',
+    margin: '0 auto',
+    width: '100%',
   },
   brand: {
     margin: '0 20px',
+    color: '#FFFFFF'
   },
   addPost: {
     backgroundColor: '#43A047',
@@ -36,39 +38,30 @@ const styles = theme => ({
 
 });
 
-const categories = [
-  {
-      "name": "react",
-      "path": "react",
-      "isActive": true,
-  },
-  {
-      "name": "redux",
-      "path": "redux"
-  },
-  {
-      "name": "udacity",
-      "path": "udacity"
-  }
-];
-
-
-const ButtonAppBar = ({ classes }) => (
-      <AppBar position="static" className={classes.root}>
-        <Toolbar className={classes.container}>
-          <div className={classes.flex}>
-            <Typography type="title" color="inherit" className={classes.brand}>
-              Readable
+const noUnderLine = {
+  textDecoration: 'none',
+};
+const Header = ({ classes, categories }) => (
+  <AppBar position="static" className={classes.root}>
+    <Toolbar className={classes.container}>
+      <div className={classes.flex}>
+        <Link to="/" style={noUnderLine}>
+          <Typography type="title" color="inherit" className={classes.brand}>
+            Readable
             </Typography>
-            <CategoryList categories={categories} />
-          </div>
-          <Button raised className={classes.addPost}>Add New Post</Button>
-        </Toolbar>
-      </AppBar>
-  );
+        </Link>
+        <CategoryList categories={categories} />
+      </div>
+      <Link to="/new" style={noUnderLine}>
+        <Button raised className={classes.addPost}>Add New Post</Button>
+      </Link>
+    </Toolbar>
+  </AppBar>
+);
 
-ButtonAppBar.propTypes = {
-    classes: PropTypes.object.isRequired,
+Header.propTypes = {
+  classes: PropTypes.object.isRequired,
+  categories: PropTypes.array,
 };
 
-export default withStyles(styles)(ButtonAppBar);
+export default withStyles(styles)(Header);
