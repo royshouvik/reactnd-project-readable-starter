@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Post from '../components/Post';
-import { fetchPosts } from '../actions/post';
+import { fetchPosts, upVote, downVote } from '../actions/post';
 
 class PostList extends Component {
 
@@ -19,12 +19,19 @@ class PostList extends Component {
         }
     }
     render() {
-        const { posts } = this.props;
+        const { posts, upVote, downVote } = this.props;
         return (
             <main className="container">
                 <section className="posts">
                     {
-                        posts && posts.map(post => <Post key={post.id} post={post} />)
+                        posts && posts.map(post => (
+                        <Post
+                            key={post.id}
+                            post={post}
+                            onUpVote={() => upVote(post.id)}
+                            onDownVote={() => downVote(post.id)}
+                        />)
+                        )
                     }
                 </section>
             </main>
@@ -43,6 +50,8 @@ const mapStateToProps = ({ posts }) => {
   
   const mapDispatchToProps = {
     fetchPosts,
+    upVote,
+    downVote,
   }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostList);
