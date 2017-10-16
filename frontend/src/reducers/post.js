@@ -1,6 +1,7 @@
 import {
   FETCH_POSTS_PENDING,
   FETCH_POSTS_FULFILLED,
+  FETCH_POST_FULFILLED,
   FETCH_POSTS_REJECTED,
   VOTE_POST_FULFILLED,
 } from '../actions/post';
@@ -8,7 +9,8 @@ import {
 const initialState = {
     isFetching: false,
     isEmpty: false,
-    data: []
+    data: [],
+    activePost: null,
   };
   
 const posts = ( state = initialState,  action) => {
@@ -21,6 +23,10 @@ const posts = ( state = initialState,  action) => {
           isFetching: false,
           isEmpty: (action.payload.length === 0),
           data: action.payload,
+      });
+    case FETCH_POST_FULFILLED:
+      return Object.assign({}, state, {
+          activePost: action.payload,
       });
 
     case FETCH_POSTS_REJECTED:

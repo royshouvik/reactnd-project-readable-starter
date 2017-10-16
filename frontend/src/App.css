@@ -21,3 +21,9 @@ main.container {
   height: 3px;
   border-bottom: 3px solid white;
 }
+
+.sortmenu {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 0 10%;
+}

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import PostList from './containers/PostList';
+import PostDetail from './containers/PostDetail';
 import NewPost from './containers/NewPost';
 import { fetchCategories } from './actions/category';
 
@@ -27,6 +28,7 @@ class App extends Component {
         <Header categories={categories} />
         <Switch>
           <Route path="/new" component={NewPost} />
+          <Route path="/post/:postId" component={PostDetail} />
           <Route path="/:category?" component={PostList} />
         </Switch>
       </div>

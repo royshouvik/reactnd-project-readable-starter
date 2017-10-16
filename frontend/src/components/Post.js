@@ -10,6 +10,7 @@ import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
 import ArrowDown from 'material-ui-icons/KeyboardArrowDown';
 import ArrowUp from 'material-ui-icons/KeyboardArrowUp';
+import { Link } from 'react-router-dom';
 
 
 const propTypes = {
@@ -93,6 +94,7 @@ const styles = theme => ({
 
 function Post({ post, classes, onUpVote, onDownVote }) {
     return (
+        
         <Paper className={classes.root} elevation={4}>
             <div className={classes.voteContainer}>
                 <IconButton className={classes.button} aria-label="up vote" onClick={onUpVote}>
@@ -120,9 +122,11 @@ function Post({ post, classes, onUpVote, onDownVote }) {
 
                 </div>
                 <div>
-                    <Typography type="headline" component="h3" className={classes.title}>
-                        {post.title}
-                    </Typography>
+                    <Link to={`/post/${post.id}`} style={{ textDecoration: 'none'}}>
+                        <Typography type="headline" component="h3" className={classes.title}>
+                            {post.title}
+                        </Typography>
+                    </Link>
                     <Typography type="body1" component="p" className={classes.body}>
                         {post.body}
                     </Typography>
@@ -152,6 +156,7 @@ function Post({ post, classes, onUpVote, onDownVote }) {
                 </div>
             </div>
         </Paper>
+        
     )
 }
 
