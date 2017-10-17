@@ -50,9 +50,9 @@ PostDetail.propTypes = {
    
 };
 
-const mapStateToProps = ({ posts }) => {
+const mapStateToProps = ({ postDetail }) => {
     return {
-      post: posts.activePost,
+      post: postDetail.activePost,
     };
   }
   

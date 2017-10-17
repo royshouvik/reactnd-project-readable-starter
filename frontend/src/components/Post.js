@@ -24,6 +24,7 @@ const propTypes = {
     }).isRequired,
     onDownVote: PropTypes.func.isRequired,
     onUpVote: PropTypes.func.isRequired,
+    showComment: PropTypes.bool,
 };
 
 const styles = theme => ({
@@ -92,9 +93,8 @@ const styles = theme => ({
     }
 });
 
-function Post({ post, classes, onUpVote, onDownVote }) {
+function Post({ post, classes, onUpVote, onDownVote, showComment }) {
     return (
-        
         <Paper className={classes.root} elevation={4}>
             <div className={classes.voteContainer}>
                 <IconButton className={classes.button} aria-label="up vote" onClick={onUpVote}>
@@ -136,7 +136,7 @@ function Post({ post, classes, onUpVote, onDownVote }) {
                         Edit
                     </Button>
                     {
-                        post.comments.length > 0 ? (
+                       showComment && ( post.comments.length > 0 ? (
                             <Badge badgeContent={post.comments.length} color="primary">
                                 <Button dense className={classes.actionButton} style={{ marginLeft: '10px'}}>
                                     Comment
@@ -146,7 +146,7 @@ function Post({ post, classes, onUpVote, onDownVote }) {
                         <Button dense className={classes.actionButton} style={{ marginLeft: '10px'}}>
                             Comment
                         </Button>
-                        )
+                        ))
                     }
                     <div className={classes.deleteContainer}>
                         <Button dense className={classes.deleteButton}>

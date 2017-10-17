@@ -56,7 +56,7 @@ const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        flexGrow: 1,
+        flexGrow: 0.5,
     },
     postContainer: {
         flexGrow: 9,

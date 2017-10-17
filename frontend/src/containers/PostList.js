@@ -69,6 +69,7 @@ class PostList extends Component {
                             <Post
                                 key={post.id}
                                 post={post}
+                                showComment
                                 onUpVote={() => upVote(post.id)}
                                 onDownVote={() => downVote(post.id)}
                             />)
