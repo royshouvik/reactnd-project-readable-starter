@@ -1,4 +1,8 @@
-import { FETCH_CATEGORIES_PENDING, FETCH_CATEGORIES_FULFILLED, FETCH_CATEGORIES_REJECTED } from '../actions/category';
+import {
+  FETCH_CATEGORIES_PENDING,
+  FETCH_CATEGORIES_FULFILLED,
+  FETCH_CATEGORIES_REJECTED,
+} from '../actionTypes/category';
 
 const initialState = {
     isFetching: false,

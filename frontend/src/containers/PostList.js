@@ -2,28 +2,45 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Post from '../components/Post';
-import { fetchPosts, upVote, downVote } from '../actions/post';
-import Menu, { MenuItem } from 'material-ui/Menu';
-import Button from 'material-ui/Button';
+import SortMenu, { sortKey } from '../components/SortMenu';
+import { fetchPosts, upVote, downVote, editPost, deletePost } from '../actions/post';
 
-const sortFunction = (field) => (direction) => {
-    if (direction === 'asc') {
-        return (a, b) => a[field] - b[field];
+const getSortFunction = (sort) => {
+    const sortFunction = (field) => (direction) => {
+        if (direction === 'asc') {
+            return (a, b) => a[field] - b[field];
+        }
+        return (a, b) => b[field] - a[field];
+    };
+    switch(sort) {
+        case sortKey.VOTE_ASCENDING:
+            return sortFunction('voteScore')('asc');
+        case sortKey.VOTE_DESCENDING:
+            return sortFunction('voteScore')('des');
+        case sortKey.DATE_ASCENDING:
+            return sortFunction('timestamp')('asc');
+        case sortKey.DATE_DESCENDING:
+            return sortFunction('timestamp')('des');
+        default:
+            return sortFunction('voteScore')('asc');
     }
-    return (a, b) => b[field] - a[field];
 }
 class PostList extends Component {
     state = {
         anchorEl: null,
-        open: false,
+        sortMenuOpen: false,
+        sortKey: null,
     };
 
-    handleClick = event => {
-        this.setState({ open: true, anchorEl: event.currentTarget });
+    handleSortOpen = event => {
+        this.setState({ sortMenuOpen: true, anchorEl: event.currentTarget });
     };
 
-    handleRequestClose = () => {
-        this.setState({ open: false });
+    handleSortClose = (sortKey) => {
+        if (sortKey) {
+            this.setState({ sortKey });
+        }
+        this.setState({ sortMenuOpen: false });
     };
 
     componentDidMount() {
@@ -39,37 +56,26 @@ class PostList extends Component {
         }
     }
     render() {
-        const { posts, upVote, downVote } = this.props;
+        const { posts, upVote, downVote, editPost, deletePost } = this.props;
+        const sortFunction = getSortFunction(this.state.sortKey);
+        const sortedPost = [...posts].sort(sortFunction);
         return (
             <main className="container">
-                <div className="sortmenu">
-                    <Button
-                        dense
-                        aria-owns={this.state.open ? 'simple-menu' : null}
-                        aria-haspopup="true"
-                        onClick={this.handleClick}
-                    >
-                        SORT BY
-                </Button>
-                    <Menu
-                        id="simple-menu"
-                        anchorEl={this.state.anchorEl}
-                        open={this.state.open}
-                        onRequestClose={this.handleRequestClose}
-                    >
-                        <MenuItem onClick={this.handleRequestClose}>Vote Ascending</MenuItem>
-                        <MenuItem onClick={this.handleRequestClose}>Vote Descending</MenuItem>
-                        <MenuItem onClick={this.handleRequestClose}>Date Ascending</MenuItem>
-                        <MenuItem onClick={this.handleRequestClose}>Date Descending</MenuItem>
-                    </Menu>
-                </div>
+                <SortMenu
+                    handleClick={this.handleSortOpen}
+                    handleRequestClose={this.handleSortClose}
+                    isOpen={this.state.sortMenuOpen}
+                    anchorEl={this.state.anchorEl}
+                />
                 <section className="posts">
                     {
-                        posts && posts.map(post => (
+                        sortedPost && sortedPost.map(post => (
                             <Post
                                 key={post.id}
                                 post={post}
+                                onEdit={editPost}
                                 showComment
+                                onDelete={() => deletePost(post.id)}
                                 onUpVote={() => upVote(post.id)}
                                 onDownVote={() => downVote(post.id)}
                             />)
@@ -92,6 +98,8 @@ const mapStateToProps = ({ posts }) => {
 
 const mapDispatchToProps = {
     fetchPosts,
+    editPost,
+    deletePost,
     upVote,
     downVote,
 }

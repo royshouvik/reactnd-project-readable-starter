@@ -1,26 +1,14 @@
 import fetch from 'isomorphic-fetch';
-import { PENDING, FULFILLED, REJECTED } from 'redux-promise-middleware';
+import uuid from 'uuid/v1';
 import { API_BASE_URL, REQUEST_HEADER } from '../constants';
-
-
-export const FETCH_POSTS = 'FETCH_POSTS';
-
-export const FETCH_POSTS_PENDING = `${FETCH_POSTS}_${PENDING}`;
-export const FETCH_POSTS_FULFILLED = `${FETCH_POSTS}_${FULFILLED}`;
-export const FETCH_POSTS_REJECTED = `${FETCH_POSTS}_${REJECTED}`;
-
-export const FETCH_POST = 'FETCH_POST';
-
-export const FETCH_POST_PENDING = `${FETCH_POST}_${PENDING}`;
-export const FETCH_POST_FULFILLED = `${FETCH_POST}_${FULFILLED}`;
-export const FETCH_POST_REJECTED = `${FETCH_POST}_${REJECTED}`;
-
-export const VOTE_POST = 'VOTE_POST';
-
-export const VOTE_POST_PENDING = `${VOTE_POST}_${PENDING}`;
-export const VOTE_POST_FULFILLED = `${VOTE_POST}_${FULFILLED}`;
-export const VOTE_POST_REJECTED = `${VOTE_POST}_${REJECTED}`;
-
+import {
+  FETCH_POST,
+  FETCH_POSTS,
+  VOTE_POST,
+  EDIT_POST,
+  ADD_POST,
+  DELETE_POST,
+ } from '../actionTypes/post'
 
 export function fetchPosts(category) {
     const endPoint = category ? `/${category}/posts` : '/posts';
@@ -40,6 +28,27 @@ export function fetchPost(postId) {
     }
 };
 
+export const addPost = (post) => {
+  const endPoint = '/posts';
+  const { title, body, author, category } = post;
+  const options = Object.assign({}, REQUEST_HEADER, {
+    method: 'post',
+    body: JSON.stringify(Object.assign({}, {
+      id: uuid(),
+      timestamp: new Date().getTime(),
+      title,
+      body,
+      author,
+      category,
+    })),
+  });
+  const payload = fetch(`${API_BASE_URL}${endPoint}`, options).then(res => res.json());
+  return {
+    type: ADD_POST,
+    payload,
+  }
+};
+
 const vote = (direction) => (postId) => {
   const endPoint = `/posts/${postId}`;
   const options = Object.assign({}, REQUEST_HEADER, {
@@ -57,3 +66,29 @@ const vote = (direction) => (postId) => {
 
 export const upVote = vote('upVote');
 export const downVote = vote('downVote');
+
+export function editPost(postId, post) {
+  const endPoint = `/posts/${postId}`;
+  const { title, body } = post;
+  const options = Object.assign({}, REQUEST_HEADER, {
+    method: 'put',
+    body: JSON.stringify({ title, body }),
+  });
+  const payload = fetch(`${API_BASE_URL}${endPoint}`, options).then(res => res.json());
+  return {
+    type: EDIT_POST,
+    payload,
+  }
+};
+
+export function deletePost(postId) {
+  const endPoint = `/posts/${postId}`;
+  const options = Object.assign({}, REQUEST_HEADER, {
+    method: 'delete',
+  });
+  const payload = fetch(`${API_BASE_URL}${endPoint}`, options).then(res => res.json());
+  return {
+    type: DELETE_POST,
+    payload,
+  }
+};

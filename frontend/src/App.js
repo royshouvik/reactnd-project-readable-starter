@@ -28,7 +28,7 @@ class App extends Component {
         <Header categories={categories} />
         <Switch>
           <Route path="/new" component={NewPost} />
-          <Route path="/post/:postId" component={PostDetail} />
+          <Route path="/:category/:postId" component={PostDetail} />
           <Route path="/:category?" component={PostList} />
         </Switch>
       </div>
